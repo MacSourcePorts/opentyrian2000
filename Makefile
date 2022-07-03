@@ -1,11 +1,16 @@
 # BUILD SETTINGS ###############################################################
 
+ifeq (Darwin, $(shell uname))
+    PLATFORM := UNIX
+    TYRIAN_DIR = ../Resources/data
+else
 ifneq ($(filter Msys Cygwin, $(shell uname -o)), )
     PLATFORM := WIN32
     TYRIAN_DIR = C:\\TYRIAN
 else
     PLATFORM := UNIX
     TYRIAN_DIR = $(gamesdir)/opentyrian2000
+endif
 endif
 
 WITH_NETWORK := true
@@ -69,6 +74,16 @@ CFLAGS ?= -pedantic \
           -O2
 LDFLAGS ?=
 LDLIBS ?=
+
+ifeq (Darwin, $(shell uname))
+	CPPFLAGS += -mmacosx-version-min=10.6 -arch $(ARCH) -framework Cocoa
+	CFLAGS += -mmacosx-version-min=10.6 -arch $(ARCH) -framework Cocoa
+	LDFLAGS += -mmacosx-version-min=10.6 -arch $(ARCH) -framework Cocoa
+	SRCS_M := $(wildcard src/*.m)
+	SRCS += SRCS_M
+	OBJS += $(SRCS_M:src/%.m=obj/%.o)
+	DEPS += $(SRCS_M:src/%.m=obj/%.d)
+endif
 
 ifeq ($(WITH_NETWORK), true)
     SDL_CPPFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --cflags)
@@ -135,5 +150,9 @@ $(TARGET) : $(OBJS)
 -include $(DEPS)
 
 obj/%.o : src/%.c
+	@mkdir -p "$(dir $@)"
+	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c -o $@ $<
+
+obj/%.o : src/%.m
 	@mkdir -p "$(dir $@)"
 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c -o $@ $<

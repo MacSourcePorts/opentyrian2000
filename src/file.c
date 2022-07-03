@@ -28,11 +28,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(__APPLE__)
+#import "msputils.h"
+#endif
+
 const char *custom_data_dir = NULL;
 
 // finds the Tyrian data directory
 const char *data_dir( void )
 {
+#if defined(__APPLE__)
+	const char *custom_data_dir = getBundlePathSubdir("Contents/Resources/data");
+#endif
+
 	const char *dirs[] =
 	{
 		custom_data_dir,
