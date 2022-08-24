@@ -76,9 +76,9 @@ LDFLAGS ?=
 LDLIBS ?=
 
 ifeq (Darwin, $(shell uname))
-	CPPFLAGS += -mmacosx-version-min=10.6 -arch $(ARCH) -framework Cocoa
-	CFLAGS += -mmacosx-version-min=10.6 -arch $(ARCH) -framework Cocoa
-	LDFLAGS += -mmacosx-version-min=10.6 -arch $(ARCH) -framework Cocoa
+	CPPFLAGS += -mmacosx-version-min=10.7 -arch $(ARCH) -framework Cocoa
+	CFLAGS += -mmacosx-version-min=10.7 -arch $(ARCH) -framework Cocoa
+	LDFLAGS += -mmacosx-version-min=10.7 -arch $(ARCH) -framework Cocoa
 	SRCS_M := $(wildcard src/*.m)
 	SRCS += SRCS_M
 	OBJS += $(SRCS_M:src/%.m=obj/%.o)

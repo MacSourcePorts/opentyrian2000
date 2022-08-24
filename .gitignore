@@ -39,3 +39,5 @@ build-arm64
 build-x86_64
 release
 .vscode/settings.json
+.DS_Store
+.vscode
